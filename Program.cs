@@ -1,13 +1,11 @@
 using System;
 using System.Collections.Generic;
 
-
 class Employee
 {
     public string Name {set; get;}
     public string Surname {set; get;}
     public string Type {set; get;}
-
 }
 
 class Program
@@ -40,7 +38,6 @@ class Program
                 Console.WriteLine("Employee deleted");
                 break;
             }
-
         }
     }
 
@@ -55,8 +52,6 @@ class Program
         {
             Console.WriteLine("Name: " + empl.Name + "Surname: " + empl.Surname + "Type: " + empl.Type);
         }
-        
-
     }
 
     static void FindEmployee()
