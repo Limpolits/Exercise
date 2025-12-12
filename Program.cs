@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 class Employee
 {
@@ -11,6 +12,7 @@ class Employee
 class Program
 {    
     static List<Employee> employees = new List<Employee>();
+    
     static void AddEmployee()
     {   
         Employee employee = new Employee();
@@ -63,70 +65,75 @@ class Program
         {
             if (empl.Surname == srnm)
             {
-                Console.WriteLine("Name: " + empl.Name + " " + "Surname: " + empl.Surname + " " + "Type: " + empl.Type);
+                Console.WriteLine("Name:" + empl.Name  + " Surname:" + empl.Surname + "  " + " Type: " + empl.Type);
             }
         }
     }
 
     static void Main()
     {
-        Console.WriteLine("Enter your type:");
-        Console.WriteLine("a) Manager");
-        Console.WriteLine("b) Employee");
-        string role = Console.ReadLine();
-
-        if (role == "a")
+        bool moveOn = true;
+        while (moveOn)
         {
-            Console.WriteLine("Select your action:");
-            Console.WriteLine("1. Add Employee");
-            Console.WriteLine("2. Delete Employee");
-            Console.WriteLine("3. Display Employees");
-            Console.WriteLine("4. Find Employee");
-            string number = Console.ReadLine();
+            Console.WriteLine("Enter your type:");
+            Console.WriteLine("a) Manager");
+            Console.WriteLine("b) Employee");
+            string role = Console.ReadLine();
 
-            switch (number)
+            if (role == "a")
             {
-                case "1": 
-                    AddEmployee();
-                    break;
-                case "2": 
-                    DeleteEmployee();
-                    break;
-                case "3": 
-                    DisplayEmployees();
-                    break;
-                case "4": 
-                    FindEmployee();
-                    break;
-                default: 
-                    Console.WriteLine("Please pick a valid choice");
-                    break;
+                Console.WriteLine("Select your action:");
+                Console.WriteLine("1. Add Employee");
+                Console.WriteLine("2. Delete Employee");
+                Console.WriteLine("3. Display Employees");
+                Console.WriteLine("4. Find Employee");
+                string number = Console.ReadLine();
+
+                switch (number)
+                {
+                    case "1": 
+                        AddEmployee();
+                        break;
+                    case "2": 
+                        DeleteEmployee();
+                        break;
+                    case "3": 
+                        DisplayEmployees();
+                        break;
+                    case "4": 
+                        FindEmployee();
+                        break;
+                    default: 
+                        Console.WriteLine("Please pick a valid choice");
+                        break;
+                }
             }
-        }
 
-        else if (role == "b")
-        {
-            Console.WriteLine("1. Display Employees");
-            Console.WriteLine("2. Find Employee");
-            string number = Console.ReadLine();
-
-            switch (number)
+            else if (role == "b")
             {
-                case "1": 
-                    DisplayEmployees();
-                    break;
-                case "2": 
-                    FindEmployee();
-                    break;
-                default: 
-                    Console.WriteLine("Please pick a valid choice");
-                    break;
-            }
-        }
+                Console.WriteLine("1. Display Employees");
+                Console.WriteLine("2. Find Employee");
+                string number = Console.ReadLine();
 
-        else
-        {
-            Console.WriteLine("Please pick a valid choice");
+                switch (number)
+                {
+                    case "1": 
+                        DisplayEmployees();
+                        break;
+                    case "2": 
+                        FindEmployee();
+                        break;
+                    default: 
+                        Console.WriteLine("Please pick a valid choice");
+                        break;
+                }
+            }
+
+            else
+            {
+                Console.WriteLine("Please pick a valid choice");
+                moveOn = false;
+            }
         }
     }
 }
