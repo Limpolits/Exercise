@@ -1,19 +1,15 @@
 using System;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
-
+using System.Linq;
 class Employee
 {
     public string Name {set; get;}
     public string Surname {set; get;}
     public string Type {set; get;}
-}
 
-class Program
-{    
-    static List<Employee> employees = new List<Employee>();
+    private static List<Employee> employees = new();
     
-    static void AddEmployee()
+    public static void AddEmployee()
     {   
         Employee employee = new Employee();
 
@@ -27,23 +23,26 @@ class Program
         employees.Add(employee);
     }
     
-    static void DeleteEmployee()
+    public static void DeleteEmployee()
     {
         Console.WriteLine("Insert employee's surname: ");
         string srnm = Console.ReadLine();
 
-        for (int i = 0; i < employees.Count; i++)
+        var employee = employees.FirstOrDefault(e => e.Surname == srnm);
+
+        if (employee != null)
         {
-            if (srnm == employees[i].Surname)
-            {
-                employees.RemoveAt(i);
-                Console.WriteLine("Employee deleted");
-                break;
-            }
+            employees.Remove(employee);
+            Console.WriteLine("Employee deleted succesfully");
+        }
+
+        else
+        {
+            Console.WriteLine("Didn't found an employee with this surname");
         }
     }
 
-    static void DisplayEmployees()
+    public static void DisplayEmployees()
     {
         if (employees.Count == 0)
         {
@@ -52,11 +51,11 @@ class Program
 
         foreach (var empl in employees)
         {
-            Console.WriteLine("Name: " + empl.Name + "Surname: " + empl.Surname + "Type: " + empl.Type);
+            Console.WriteLine($"Name: {empl.Name}, Surname: {empl.Surname}, Type: {empl.Type}");
         }
     }
 
-    static void FindEmployee()
+    public static void FindEmployee()
     {
         Console.WriteLine("Insert employee's surname: ");
         string srnm = Console.ReadLine();
@@ -65,11 +64,14 @@ class Program
         {
             if (empl.Surname == srnm)
             {
-                Console.WriteLine("Name:" + empl.Name  + " Surname:" + empl.Surname + "  " + " Type: " + empl.Type);
+                Console.WriteLine($"Name: {empl.Name}, Surname: {empl.Surname}, Type: {empl.Type}");
             }
         }
     }
+}
 
+class Program
+{    
     static void Main()
     {
         bool moveOn = true;
@@ -92,16 +94,16 @@ class Program
                 switch (number)
                 {
                     case "1": 
-                        AddEmployee();
+                        Employee.AddEmployee();
                         break;
                     case "2": 
-                        DeleteEmployee();
+                        Employee.DeleteEmployee();
                         break;
                     case "3": 
-                        DisplayEmployees();
+                        Employee.DisplayEmployees();
                         break;
                     case "4": 
-                        FindEmployee();
+                        Employee.FindEmployee();
                         break;
                     default: 
                         Console.WriteLine("Please pick a valid choice");
@@ -118,10 +120,10 @@ class Program
                 switch (number)
                 {
                     case "1": 
-                        DisplayEmployees();
+                        Employee.DisplayEmployees();
                         break;
                     case "2": 
-                        FindEmployee();
+                        Employee.FindEmployee();
                         break;
                     default: 
                         Console.WriteLine("Please pick a valid choice");
