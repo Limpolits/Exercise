@@ -1,6 +1,11 @@
 import { Routes } from '@angular/router';
-import { NewComponent } from './components/new/new';
+import { Menu } from './components/menu/menu';
+import { Manager } from './components/manager/manager';
+import { Addempl } from './components/addempl/addempl';
 
 export const routes: Routes = [
-    {path: 'new', component: NewComponent}
+  { path: '', redirectTo: '/menu', pathMatch: 'full' }, 
+  { path: 'menu', component: Menu },
+  { path: 'manager', component: Manager },
+  { path: 'addempl', component: Addempl}
 ];
