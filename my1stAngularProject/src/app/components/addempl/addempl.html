@@ -1,0 +1,19 @@
+<form (ngSubmit)="addEmployee()">
+  <label>Name:</label>
+  <input type="text" [(ngModel)]="newEmployee.name" name="name" required />
+
+  <label>Surname:</label>
+  <input type="text" [(ngModel)]="newEmployee.surname" name="surname" required />
+
+  <label>Type:</label>
+  <input type="text" [(ngModel)]="newEmployee.type" name="type" required />
+
+  <button type="submit">Add Employee</button>
+</form>
+
+<h3>Employees</h3>
+<ul>
+  <li *ngFor="let e of employees">
+    {{ e.name }} {{ e.surname }} ({{ e.type }})
+  </li>
+</ul>
