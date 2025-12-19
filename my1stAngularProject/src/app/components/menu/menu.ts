@@ -10,8 +10,8 @@ import { Router } from '@angular/router';
   styleUrl: './menu.css',
 })
 
-export class Menu {
-
+export class Menu 
+{
   constructor(private router: Router) {}
 
   Role(role: string) {

@@ -11,6 +11,4 @@ import { Menu } from './components/menu/menu';
   styleUrl: './app.css'
 })
 
-export class App {
-  protected readonly title = signal('my1stAngularProject');
-}
+export class App {}

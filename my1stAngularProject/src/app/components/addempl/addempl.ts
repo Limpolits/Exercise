@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EmployeesService, Employee } from '../../services/employees';
@@ -10,28 +10,30 @@ import { EmployeesService, Employee } from '../../services/employees';
   templateUrl: './addempl.html'
 })
 
-export class Addempl implements OnInit 
+export class Addempl 
 {
   employees: Employee[] = [];
-
   newEmployee: Employee = { name: '', surname: '', type: '' };
 
   constructor(private employeesService: EmployeesService) {}
 
-  ngOnInit(): void {
-    this.loadEmployees();
-  }
-
-  loadEmployees() {
+  displayEmployees() {
     this.employeesService.getEmployees()
       .subscribe(data => this.employees = data);
   }
 
   addEmployee() {
+    if (!this.newEmployee.name.trim() ||
+        !this.newEmployee.surname.trim() ||
+        !this.newEmployee.type.trim()) {
+      alert('All fields are required!');
+      return; 
+    }
+
     this.employeesService.addEmployee(this.newEmployee)
       .subscribe(() => {
-        this.loadEmployees(); 
-        this.newEmployee = { name: '', surname: '', type: '' }; 
+        this.displayEmployees();
+        this.newEmployee = { name: '', surname: '', type: '' };
       });
   }
 }

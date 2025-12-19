@@ -12,8 +12,8 @@ export interface Employee {
   providedIn: 'root'
 })
 
-export class EmployeesService {
-
+export class EmployeesService 
+{
   private apiUrl = 'https://localhost:44353/employees';
 
   constructor(private http: HttpClient) {}
@@ -21,7 +21,7 @@ export class EmployeesService {
   addEmployee(employee: Employee) {
     return this.http.post<Employee>(this.apiUrl, employee);
   }
-  
+
   getEmployees(): Observable<Employee[]> {
     return this.http.get<Employee[]>(this.apiUrl);
   }
