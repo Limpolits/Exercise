@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { EmployeesService, Employee } from '../../services/employees';
@@ -10,30 +10,39 @@ import { EmployeesService, Employee } from '../../services/employees';
   templateUrl: './addempl.html'
 })
 
-export class Addempl 
-{
+export class Addempl implements OnInit {
+
   employees: Employee[] = [];
-  newEmployee: Employee = { name: '', surname: '', type: '' };
+
+  newEmployee: Employee = {name: '', surname: '', type: ''};
 
   constructor(private employeesService: EmployeesService) {}
 
-  displayEmployees() {
-    this.employeesService.getEmployees()
-      .subscribe(data => this.employees = data);
+  ngOnInit(): void {
+    this.displayEmployees(); 
   }
 
-  addEmployee() {
+  displayEmployees(): void {
+    this.employeesService.getEmployees().subscribe({
+        next: data => this.employees = data,
+        error: err => console.error('Load failed', err)
+      });
+  }
+
+  addEmployee(): void {
     if (!this.newEmployee.name.trim() ||
         !this.newEmployee.surname.trim() ||
         !this.newEmployee.type.trim()) {
       alert('All fields are required!');
-      return; 
+      return;
     }
 
-    this.employeesService.addEmployee(this.newEmployee)
-      .subscribe(() => {
-        this.displayEmployees();
-        this.newEmployee = { name: '', surname: '', type: '' };
+    this.employeesService.addEmployee(this.newEmployee).subscribe({
+        next: () => {
+          this.newEmployee = {name: '', surname: '', type: ''};
+          this.displayEmployees(); 
+        },
+        error: err => console.error('Insert failed', err)
       });
   }
 }

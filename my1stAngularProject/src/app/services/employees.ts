@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 export interface Employee {
+  idEmployees?: number;   
   name: string;
   surname: string;
   type: string;
@@ -11,18 +12,21 @@ export interface Employee {
 @Injectable({
   providedIn: 'root'
 })
+export class EmployeesService {
 
-export class EmployeesService 
-{
   private apiUrl = 'https://localhost:44353/employees';
 
   constructor(private http: HttpClient) {}
 
-  addEmployee(employee: Employee) {
+  addEmployee(employee: Employee): Observable<Employee> {
     return this.http.post<Employee>(this.apiUrl, employee);
   }
 
   getEmployees(): Observable<Employee[]> {
     return this.http.get<Employee[]>(this.apiUrl);
+  }
+
+  deleteEmployee(surname: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/${surname}`);
   }
 }
