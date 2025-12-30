@@ -1,4 +1,6 @@
-﻿var builder = WebApplication.CreateBuilder(args);
+﻿using MySql.Data.MySqlClient;
+
+var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddCors(options =>
 {
@@ -18,33 +20,72 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors();
-
 app.UseHttpsRedirection();
 
-var employees = new List<Employee>
-{
-    new Employee { Name = "Ilias", Surname = "Fytsilis", Type = "Employee" },
-    new Employee { Name = "Nikos", Surname = "Papadopoulos", Type = "Manager" }
-};
+string connectionString =
+    builder.Configuration.GetConnectionString("MySql");
 
-app.MapGet("/employees", () => employees);
+app.MapGet("/employees", () =>
+{
+    var employees = new List<Employee>();
+
+    using var conn = new MySqlConnection(connectionString);
+    conn.Open();
+
+    var cmd = new MySqlCommand(
+        "SELECT idemployees, name, surname, type FROM employees",
+        conn);
+
+    using var reader = cmd.ExecuteReader();
+    while (reader.Read())
+    {
+        employees.Add(new Employee
+        {
+            Id = reader.GetInt32("idemployees"),
+            Name = reader.GetString("name"),
+            Surname = reader.GetString("surname"),
+            Type = reader.GetString("type")
+        });
+    }
+
+    return Results.Ok(employees);
+});
+
 
 app.MapPost("/employees", (Employee employee) =>
 {
-    employees.Add(employee);
-        return Results.Created($"/employees/{employee.Surname}", employee);
+    using var conn = new MySqlConnection(connectionString);
+    conn.Open();
+
+    var cmd = new MySqlCommand(
+        @"INSERT INTO employees (name, surname, type)
+          VALUES (@name, @surname, @type)", conn);
+
+    cmd.Parameters.AddWithValue("@name", employee.Name);
+    cmd.Parameters.AddWithValue("@surname", employee.Surname);
+    cmd.Parameters.AddWithValue("@type", employee.Type);
+
+    cmd.ExecuteNonQuery();
+
+    return Results.Created("/employees", employee);
 });
+
 
 app.MapDelete("/employees/{surname}", (string surname) =>
 {
-    var employee = employees.FirstOrDefault(e =>
-        e.Surname.Equals(surname, StringComparison.OrdinalIgnoreCase));
+    using var conn = new MySqlConnection(connectionString);
+    conn.Open();
 
-    if (employee == null)
-        return Results.NotFound();
+    var cmd = new MySqlCommand(
+        "DELETE FROM employees WHERE surname = @surname", conn);
 
-    employees.Remove(employee);
-        return Results.Ok();
+    cmd.Parameters.AddWithValue("@surname", surname);
+
+    int rows = cmd.ExecuteNonQuery();
+
+    return rows == 0
+        ? Results.NotFound()
+        : Results.Ok();
 });
 
 app.Run();
